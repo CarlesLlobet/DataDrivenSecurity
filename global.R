@@ -1,13 +1,15 @@
 library(dplyr)
 
-allzips <- readRDS("data/superzip.rds")
-allzips$latitude <- jitter(allzips$latitude)
-allzips$longitude <- jitter(allzips$longitude)
-allzips$college <- allzips$college * 100
-allzips$zipcode <- formatC(allzips$zipcode, width=5, format="d", flag="0")
-row.names(allzips) <- allzips$zipcode
+inputData <- read.csv("data/cleanData.csv", header = TRUE, stringsAsFactors = FALSE)
 
-cleantable <- allzips %>%
+#allzips <- readRDS("data/superzip.rds")
+#allzips$latitude <- jitter(allzips$latitude)
+#allzips$longitude <- jitter(allzips$longitude)
+#allzips$college <- allzips$college * 100
+#allzips$zipcode <- formatC(allzips$zipcode, width=5, format="d", flag="0")
+#row.names(allzips) <- allzips$zipcode
+
+cleantable <- inputData %>%
   select(
     City = city.x,
     State = state.x,
