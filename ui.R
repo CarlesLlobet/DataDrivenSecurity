@@ -55,10 +55,10 @@ navbarPage("Fortinet connections analyzer", id="nav",
     ),
     fluidRow(
       column(1,
-        numericInput("minScore", "Min score", min=0, max=100, value=0)
+        dateInput("minDate", "Min date")
       ),
       column(1,
-        numericInput("maxScore", "Max score", min=0, max=100, value=100)
+        dateInput("maxDate", "Max date")
       )
     ),
     hr(),
