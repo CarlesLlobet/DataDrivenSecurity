@@ -6,7 +6,7 @@ library(dplyr)
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
 set.seed(100)
-zipdata <- inputData[sample.int(nrow(inputData), 10000),]
+data <- inputData[sample.int(nrow(inputData), 10000),]
 # By ordering by centile, we ensure that the (comparatively rare) SuperZIPs
 # will be drawn last and thus be easier to see
 #zipdata <- zipdata[order(zipdata$centile),]
@@ -166,14 +166,13 @@ function(input, output, session) {
     #})
   #})
 
-  output$ziptable <- DT::renderDataTable({
-    df <- cleantable %>%
+  output$data <- DT::renderDataTable({
+    df <- initialData %>%
       filter(
         Date >= input$minDate,
-        Date <= input$maxDate
-        #is.null(input$states) | State %in% input$states,
-        #is.null(input$cities) | City %in% input$cities,
-        #is.null(input$zipcodes) | Zipcode %in% input$zipcodes
+        Date <= input$maxDate,
+        is.null(input$countryFilter) | initialData$srccountry %in% input$countryFilter,
+        is.null(input$serviceFilter) | initialData$service %in% input$serviceFilter
       ) %>%
       #mutate(Action = paste('<a class="go-map" href="" data-lat="', Lat, '" data-long="', Long, '" data-zip="', Zipcode, '"><i class="fa fa-crosshairs"></i></a>', sep=""))
       mutate()

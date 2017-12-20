@@ -40,29 +40,24 @@ navbarPage("Fortinet connections analyzer", id="nav",
   tabPanel("Data explorer",
     fluidRow(
       column(3,
-        selectInput("states", "States", c("All states"="", structure(state.abb, names=state.name), "Washington, DC"="DC"), multiple=TRUE)
-      ),
-      column(3,
-        conditionalPanel("input.states",
-          selectInput("cities", "Cities", c("All cities"=""), multiple=TRUE)
-        )
-      ),
-      column(3,
-        conditionalPanel("input.states",
-          selectInput("zipcodes", "Zipcodes", c("All zipcodes"=""), multiple=TRUE)
-        )
+        selectInput("countryFilter", "Filter by country", c("All countries"="", sort(unique(inputData$srccountry))), multiple=TRUE)
       )
     ),
     fluidRow(
-      column(1,
-        dateInput("minDate", "Min date")
-      ),
-      column(1,
-        dateInput("maxDate", "Max date")
+      column(3,
+             selectInput("serviceFilter", "Filter by service", c("All services"="", sort(unique(inputData$service))), multiple=TRUE)
       )
     ),
-    hr(),
-    DT::dataTableOutput("ziptable")
+    fluidRow(
+      column(3,
+        dateInput("minDate", "Min date", "2017-12-08")
+      ),
+      column(3,
+        dateInput("maxDate", "Max date", "2017-12-11")
+      )
+    ),
+    #hr(),
+    DT::dataTableOutput("data")
   ),
 
   conditionalPanel("false", icon("crosshair"))

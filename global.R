@@ -1,20 +1,53 @@
 library(dplyr)
 
 inputData <- read.csv("data/cleanData.csv", header = TRUE, stringsAsFactors = FALSE)
+#Data cleaning
+cleanData <- inputData
+cleanData$X <- NULL
+cleanData$itime <- NULL
+cleanData$Device <- NULL
+cleanData$DOM <- NULL
+cleanData$Type <- NULL
+cleanData$Subtype <- NULL
+cleanData$Action <- NULL
+cleanData$AppCat <- NULL
+cleanData$App <- NULL
+cleanData$level <- NULL
+cleanData$Craction <- NULL
+cleanData$CRLevel <- NULL
+cleanData$Crscore <- NULL
+cleanData$dstcountry <- NULL
+cleanData$dstinf <- NULL
+cleanData$dstip <- NULL
+cleanData$dstport <- NULL
+cleanData$duration <- NULL
+cleanData$logid <- NULL
+cleanData$logver <- NULL
+cleanData$policyid <- NULL
+cleanData$policytype <- NULL
+cleanData$none <- NULL
+cleanData$proto <- NULL
+cleanData$rcvdbyte <- NULL
+cleanData$sentbyte <- NULL
+cleanData$sentpkt <- NULL
+cleanData$sessionid <- NULL
+cleanData$srcinf <- NULL
+cleanData$srcport <- NULL
+cleanData$threatcnts <- NULL
+cleanData$threatlvls <- NULL
+cleanData$threats <- NULL
+cleanData$threattyps <- NULL
+cleanData$threatwgts <- NULL
+cleanData$trandisp <- NULL
+cleanData$tranip <- NULL
+cleanData$tranport <- NULL
+cleanData <- inputData
 
-allzips <- readRDS("data/superzip.rds")
-allzips$latitude <- jitter(allzips$latitude)
-allzips$longitude <- jitter(allzips$longitude)
-allzips$college <- allzips$college * 100
-allzips$zipcode <- formatC(allzips$zipcode, width=5, format="d", flag="0")
-row.names(allzips) <- allzips$zipcode
-
-cleantable <- inputData %>%
-  select(
-    Itime = itime,
-    Date = Date,
-    Hour = Time,
-    Country = srccountry,
-    IP = srcip,
-    Service = service
-  )
+cleantable <- initialData# %>%
+#  select(
+#    Date = initialData$Date,
+#    Hour = initialData$Hour,
+#    Country = initialData$srccountry,
+#    IP = initialData$srcip,
+#    Service = initialData$service
+#  )
