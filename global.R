@@ -41,9 +41,9 @@ cleanData$threatwgts <- NULL
 cleanData$trandisp <- NULL
 cleanData$tranip <- NULL
 cleanData$tranport <- NULL
-cleanData <- inputData
+# cleanData <- inputData Perque ho tornes a repetir al final?
 
-cleantable <- initialData# %>%
+# cleantable <- initialData# %>%
 #  select(
 #    Date = initialData$Date,
 #    Hour = initialData$Hour,

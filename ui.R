@@ -1,15 +1,5 @@
 library(leaflet)
 
-# Choices for drop-downs
-vars <- c(
-  "Is SuperZIP?" = "superzip",
-  "Centile score" = "centile",
-  "College education" = "college",
-  "Median income" = "income",
-  "Population" = "adultpop"
-)
-
-
 navbarPage("Fortinet connections analyzer", id="nav",
 
   tabPanel("Interactive map",
@@ -31,8 +21,8 @@ navbarPage("Fortinet connections analyzer", id="nav",
 
         h2("Filter connections"),
 
-        selectInput("color", "Color", vars),
-        selectInput("size", "Size", vars, selected = "adultpop")
+        selectInput("countryFilter", "Filter by country", c("All countries"="", sort(unique(inputData$srccountry))), multiple=TRUE),
+        selectInput("serviceFilter", "Filter by service", c("All services"="", sort(unique(inputData$service))), multiple=TRUE)
       )
     )
   ),

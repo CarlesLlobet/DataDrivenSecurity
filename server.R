@@ -167,7 +167,7 @@ function(input, output, session) {
   #})
 
   output$data <- DT::renderDataTable({
-    df <- initialData %>%
+    df <- tta %>%
       filter(
         Date >= input$minDate,
         Date <= input$maxDate,
