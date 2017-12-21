@@ -21,8 +21,8 @@ navbarPage("Fortinet connections analyzer", id="nav",
 
         h2("Filter connections"),
 
-        selectInput("countryFilter", "Filter by country", c("All countries"="", sort(unique(inputData$srccountry))), multiple=TRUE),
-        selectInput("serviceFilter", "Filter by service", c("All services"="", sort(unique(inputData$service))), multiple=TRUE)
+        selectInput("countryFilterMAP", "Filter by country", c("All countries"="", sort(unique(inputData$srccountry))), multiple=TRUE),
+        selectInput("serviceFilterMAP", "Filter by service", c("All services"="", sort(unique(inputData$service))), multiple=TRUE)
       )
     )
   ),

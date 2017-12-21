@@ -1,6 +1,6 @@
 library(dplyr)
 
-inputData <- read.csv("data/cleanData.csv", header = TRUE, stringsAsFactors = FALSE)
+inputData <- read.csv("data/formatedData.csv", header = TRUE, stringsAsFactors = FALSE)
 #Data cleaning
 cleanData <- inputData
 cleanData$X <- NULL
