@@ -22,7 +22,7 @@ function(input, output, session) {
         urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
         attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
       ) %>%
-      setView(lng = -93.85, lat = 37.45, zoom = 4)
+      setView(lng = -3.74, lat = 40.46, zoom = 4)
   })
 
   # A reactive expression that returns the set of zips that are
@@ -66,61 +66,66 @@ function(input, output, session) {
 
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
-  #observe({
-    #colorBy <- input$color
-    #sizeBy <- input$size
-
-    #if (colorBy == "superzip") {
-      # Color and palette are treated specially in the "superzip" case, because
-      # the values are categorical instead of continuous.
-      #colorData <- ifelse(zipdata$centile >= (100 - input$threshold), "yes", "no")
-      #pal <- colorFactor("viridis", colorData)
-    #} else {
-      #colorData <- zipdata[[colorBy]]
-      #pal <- colorBin("viridis", colorData, 7, pretty = FALSE)
-    #}
-
-    #if (sizeBy == "superzip") {
-      # Radius is treated specially in the "superzip" case.
-      #radius <- ifelse(zipdata$centile >= (100 - input$threshold), 30000, 3000)
-    #} else {
-      #radius <- zipdata[[sizeBy]] / max(zipdata[[sizeBy]]) * 30000
-    #}
-
-    #leafletProxy("map", data = zipdata) %>%
-      #clearShapes() %>%
-      #addCircles(~longitude, ~latitude, radius=radius, layerId=~zipcode,
-        #stroke=FALSE, fillOpacity=0.4, fillColor=pal(colorData)) %>%
-      #addLegend("bottomleft", pal=pal, values=colorData, title=colorBy,
-        #layerId="colorLegend")
-  #})
+   observe({
+    df <- cleanData %>%
+      filter(
+        Date >= input$minDate,
+        Date <= input$maxDate,
+        is.null(input$countryFilter) | cleanData$srccountry %in% input$countryFilter,
+        is.null(input$serviceFilter) | cleanData$service %in% input$serviceFilter
+      ) %>%
+    mutate()
+  # 
+  #   # if (colorBy == "superzip") {
+  #   #   # Color and palette are treated specially in the "superzip" case, because
+  #   #   # the values are categorical instead of continuous.
+  #   #   colorData <- ifelse(zipdata$centile >= (100 - input$threshold), "yes", "no")
+  #   #   pal <- colorFactor("viridis", colorData)
+  #   # } else {
+  #     colorData <- zipdata[[colorBy]]
+  #     pal <- colorBin("viridis", colorData, 7, pretty = FALSE)
+  #   # }
+  # 
+  #   # if (sizeBy == "superzip") {
+  #   #    # Radius is treated specially in the "superzip" case.
+  #   #   radius <- ifelse(zipdata$centile >= (100 - input$threshold), 30000, 3000)
+  #   # } else {
+  #     radius <- zipdata[[sizeBy]] / max(zipdata[[sizeBy]]) * 30000
+  #   # }
+  # 
+  #   leafletProxy("map", data = zipdata) %>%
+  #     clearShapes() %>%
+  #     addCircles(~longitude, ~latitude, radius=radius, layerId=~zipcode,
+  #       stroke=FALSE, fillOpacity=0.4, fillColor=pal(colorData)) %>%
+  #     addLegend("bottomleft", pal=pal, values=colorData, title=colorBy,
+  #       layerId="colorLegend")
+  })
 
   # Show a popup at the given location
-  #showZipcodePopup <- function(zipcode, lat, lng) {
-    #selectedZip <- allzips[allzips$zipcode == zipcode,]
-    #content <- as.character(tagList(
-      #tags$h4("Score:", as.integer(selectedZip$centile)),
-      #tags$strong(HTML(sprintf("%s, %s %s",
-        #selectedZip$city.x, selectedZip$state.x, selectedZip$zipcode
-      #))), tags$br(),
-      #sprintf("Median household income: %s", dollar(selectedZip$income * 1000)), tags$br(),
-      #sprintf("Percent of adults with BA: %s%%", as.integer(selectedZip$college)), tags$br(),
-      #sprintf("Adult population: %s", selectedZip$adultpop)
-    #))
-    #leafletProxy("map") %>% addPopups(lng, lat, content, layerId = zipcode)
-  #}
+  showCountryPopup <- function(country, lat, lng) {
+    selectedZip <- allzips[allzips$zipcode == zipcode,]
+    content <- as.character(tagList(
+      tags$h4("Score:", as.integer(selectedZip$centile)),
+      tags$strong(HTML(sprintf("%s, %s %s",
+        selectedZip$city.x, selectedZip$state.x, selectedZip$zipcode
+      ))), tags$br(),
+      sprintf("Country: %s", dollar(selectedZip$income * 1000)), tags$br(),
+      sprintf("Number of Connections: %s%", as.integer(selectedZip$college)), tags$br()
+    ))
+    leafletProxy("map") %>% addPopups(lng, lat, content, layerId = zipcode)
+  }
 
   # When map is clicked, show a popup with city info
-  #observe({
-    #leafletProxy("map") %>% clearPopups()
-    #event <- input$map_shape_click
-    #if (is.null(event))
-      #return()
+  observe({
+    leafletProxy("map") %>% clearPopups()
+    event <- input$map_shape_click
+    if (is.null(event))
+      return()
 
-    #isolate({
-      #showZipcodePopup(event$id, event$lat, event$lng)
-    #})
-  #})
+    isolate({
+      showCountryPopup(event$id, event$lat, event$lng)
+    })
+  })
 
 
   ## Data Explorer ###########################################

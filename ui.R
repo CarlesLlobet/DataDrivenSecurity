@@ -20,9 +20,10 @@ navbarPage("Fortinet connections analyzer", id="nav",
         width = 330, height = "auto",
 
         h2("Filter connections"),
-
         selectInput("countryFilterMAP", "Filter by country", c("All countries"="", sort(unique(inputData$srccountry))), multiple=TRUE),
-        selectInput("serviceFilterMAP", "Filter by service", c("All services"="", sort(unique(inputData$service))), multiple=TRUE)
+        selectInput("serviceFilterMAP", "Filter by service", c("All services"="", sort(unique(inputData$service))), multiple=TRUE),
+        dateInput("minDate", "Min date", "2017-12-08"),
+        dateInput("maxDate", "Max date", "2017-12-11")
       )
     )
   ),

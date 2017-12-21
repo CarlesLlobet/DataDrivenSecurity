@@ -1,6 +1,7 @@
 library(dplyr)
 
 inputData <- read.csv("data/formatedData.csv", header = TRUE, stringsAsFactors = FALSE)
+countries <- read.csv("data/countries.csv", header = TRUE, stringsAsFactors = FALSE)
 #Data cleaning
 cleanData <- inputData
 cleanData$X <- NULL
