@@ -1,6 +1,6 @@
 # Fortinet Connection Analyzer
 
-This project aims to 
+This project aims to improve the way System Administrators detect Security Flaw Patterns in their Firewall Connection Logs, by making easy to visualize this logs filtered by services or countries. 
 
 ## Getting Started
 
