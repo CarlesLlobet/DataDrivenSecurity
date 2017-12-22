@@ -30,25 +30,14 @@ navbarPage("Fortinet connections analyzer", id="nav",
 
   tabPanel("Data explorer",
     fluidRow(
-      column(2,
-        hr()
+      column(3,
+        plotOutput("topcountries")
       ),
-      column(8,
+      column(6,
         plotOutput("cph")
       ),
-      column(2,
-        hr()
-      )
-    ),
-    fluidRow(
-      column(5,
-             plotOutput("topcountries")
-      ),
-      column(2,
-             hr()
-      ),
-      column(5,
-             plotOutput("topservices")
+      column(3,
+        plotOutput("topservices")
       )
     ),
     fluidRow(

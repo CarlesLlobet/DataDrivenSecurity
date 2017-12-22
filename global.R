@@ -42,13 +42,3 @@ cleanData$threatwgts <- NULL
 cleanData$trandisp <- NULL
 cleanData$tranip <- NULL
 cleanData$tranport <- NULL
-# cleanData <- inputData Perque ho tornes a repetir al final?
-
-# cleantable <- initialData# %>%
-#  select(
-#    Date = initialData$Date,
-#    Hour = initialData$Hour,
-#    Country = initialData$srccountry,
-#    IP = initialData$srcip,
-#    Service = initialData$service
-#  )

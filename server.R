@@ -144,31 +144,6 @@ function(input, output, session) {
 
   ## Data Explorer ###########################################
 
-  #observe({
-   # countries <- if (is.null(input$states)) character(0) else {
-        #`$`('City') %>%
-    #  filter(cleantable, Country %in% input$states) %>%
-     #   unique() %>%
-      #  sort()
-#    }
-    #stillSelected <- isolate(input$cities[input$cities %in% cities])
-    #updateSelectInput(session, "cities", choices = cities,
-      #selected = stillSelected)
-  #})
-
-  #observe({
-    #zipcodes <- if (is.null(input$states)) character(0) else {
-      #cleantable %>%
-        #filter(State %in% input$states,
-          #is.null(input$cities) | City %in% input$cities) %>%
-        #`$`('Zipcode') %>%
-        #unique() %>%
-        #sort()
-    #}
-    #stillSelected <- isolate(input$zipcodes[input$zipcodes %in% zipcodes])
-    #updateSelectInput(session, "zipcodes", choices = zipcodes,
-      #selected = stillSelected)
-  #})
   output$topservices <- renderPlot({
     data <- cleanData %>% group_by(service) %>%
         summarise(count= n())
@@ -178,10 +153,7 @@ function(input, output, session) {
     toptotal <- sum(top$count)
     result <- rbind(top, c("Other services", total-toptotal))
     #generate plot
-    bp<- ggplot(result, aes(x=result$service, y=result$count, fill=result$service))+geom_bar(width = 1, stat = "identity")
-    pie <- bp + coord_polar("y", start=0)
-    pie + scale_fill_brewer("Service", palette="Set1") + blank_theme +
-      theme(axis.text.x=element_blank())
+    pie(as.integer(result$count), labels=result$service, main="Attacks by service")
   })
   
   output$topcountries <- renderPlot({
@@ -193,10 +165,7 @@ function(input, output, session) {
     toptotal2 <- sum(top2$count)
     result2 <- rbind(top2, c("Other countries", total2-toptotal2))
     #generate plot
-    bp2<- ggplot(result2, aes(x="", y=result2$count, fill=result2$srccountry))+geom_bar(width = 1, stat = "identity")
-    pie2 <- bp2 + coord_polar("y", start=0)
-    pie2 + scale_fill_brewer("Country",palette="Set2") + blank_theme +
-      theme(axis.text.x=element_blank())
+    pie(as.integer(result2$count), labels=result2$srccountry, main="Attacks by country")
   })
   
   output$cph <- renderPlot({
@@ -233,7 +202,6 @@ function(input, output, session) {
         is.null(input$countryFilter) | cleanData$srccountry %in% input$countryFilter,
         is.null(input$serviceFilter) | cleanData$service %in% input$serviceFilter
       ) %>%
-      #mutate(Action = paste('<a class="go-map" href="" data-lat="', Lat, '" data-long="', Long, '" data-zip="', Zipcode, '"><i class="fa fa-crosshairs"></i></a>', sep=""))
       mutate()
     action <- DT::dataTableAjax(session, df)
 
