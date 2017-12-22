@@ -30,24 +30,41 @@ navbarPage("Fortinet connections analyzer", id="nav",
 
   tabPanel("Data explorer",
     fluidRow(
+      column(2,
+        hr()
+      ),
+      column(8,
+        plotOutput("cph")
+      ),
+      column(2,
+        hr()
+      )
+    ),
+    fluidRow(
+      column(5,
+             plotOutput("topcountries")
+      ),
+      column(2,
+             hr()
+      ),
+      column(5,
+             plotOutput("topservices")
+      )
+    ),
+    fluidRow(
       column(3,
         selectInput("countryFilter", "Filter by country", c("All countries"="", sort(unique(inputData$srccountry))), multiple=TRUE)
-      )
-    ),
-    fluidRow(
-      column(3,
-             selectInput("serviceFilter", "Filter by service", c("All services"="", sort(unique(inputData$service))), multiple=TRUE)
-      )
-    ),
-    fluidRow(
-      column(3,
-        dateInput("minDate", "Min date", "2017-12-08")
       ),
       column(3,
-        dateInput("maxDate", "Max date", "2017-12-11")
+             selectInput("serviceFilter", "Filter by service", c("All services"="", sort(unique(inputData$service))), multiple=TRUE)
+      ),
+      column(3,
+             dateInput("minDate", "Min date", "2017-12-08")
+      ),
+      column(3,
+             dateInput("maxDate", "Max date", "2017-12-11")
       )
     ),
-    #hr(),
     DT::dataTableOutput("data")
   ),
 

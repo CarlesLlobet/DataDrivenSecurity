@@ -3,10 +3,24 @@ library(RColorBrewer)
 library(scales)
 library(lattice)
 library(dplyr)
+library(ggforce)
+library(ggplot2)
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
 set.seed(100)
 data <- cleanData[sample.int(nrow(cleanData), 10000),]
+plotData <- cleanData
+
+blank_theme <- theme_minimal()+
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.border = element_blank(),
+    panel.grid=element_blank(),
+    axis.ticks = element_blank(),
+    plot.title=element_blank()
+    #plot.title=element_text(size=14, face="bold")
+  )
 # By ordering by centile, we ensure that the (comparatively rare) SuperZIPs
 # will be drawn last and thus be easier to see
 #zipdata <- zipdata[order(zipdata$centile),]
@@ -130,17 +144,17 @@ function(input, output, session) {
 
   ## Data Explorer ###########################################
 
-  observe({
-    countries <- if (is.null(input$states)) character(0) else {
-      filter(cleantable, Country %in% input$states) %>%
+  #observe({
+   # countries <- if (is.null(input$states)) character(0) else {
         #`$`('City') %>%
-        unique() %>%
-        sort()
-    }
+    #  filter(cleantable, Country %in% input$states) %>%
+     #   unique() %>%
+      #  sort()
+#    }
     #stillSelected <- isolate(input$cities[input$cities %in% cities])
     #updateSelectInput(session, "cities", choices = cities,
       #selected = stillSelected)
-  })
+  #})
 
   #observe({
     #zipcodes <- if (is.null(input$states)) character(0) else {
@@ -155,22 +169,62 @@ function(input, output, session) {
     #updateSelectInput(session, "zipcodes", choices = zipcodes,
       #selected = stillSelected)
   #})
-
-  #observe({
-    #if (is.null(input$goto))
-      #return()
-    #isolate({
-      #map <- leafletProxy("map")
-      #map %>% clearPopups()
-      #dist <- 0.5
-      #zip <- input$goto$zip
-      #lat <- input$goto$lat
-      #lng <- input$goto$lng
-      #showZipcodePopup(zip, lat, lng)
-      #map %>% fitBounds(lng - dist, lat - dist, lng + dist, lat + dist)
-    #})
-  #})
-
+  output$topservices <- renderPlot({
+    data <- cleanData %>% group_by(service) %>%
+        summarise(count= n())
+    data <- data[order(data$count, decreasing = TRUE),]
+    total <- sum(data$count)
+    top <- head(data, 5)
+    toptotal <- sum(top$count)
+    result <- rbind(top, c("Other services", total-toptotal))
+    #generate plot
+    bp<- ggplot(result, aes(x=result$service, y=result$count, fill=result$service))+geom_bar(width = 1, stat = "identity")
+    pie <- bp + coord_polar("y", start=0)
+    pie + scale_fill_brewer("Service", palette="Set1") + blank_theme +
+      theme(axis.text.x=element_blank())
+  })
+  
+  output$topcountries <- renderPlot({
+    data2 <- cleanData %>% group_by(srccountry) %>%
+      summarise(count= n())
+    data2 <- data2[order(data2$count, decreasing = TRUE),]
+    total2 <- sum(data2$count)
+    top2 <- head(data2, 5)
+    toptotal2 <- sum(top2$count)
+    result2 <- rbind(top2, c("Other countries", total2-toptotal2))
+    #generate plot
+    bp2<- ggplot(result2, aes(x="", y=result2$count, fill=result2$srccountry))+geom_bar(width = 1, stat = "identity")
+    pie2 <- bp2 + coord_polar("y", start=0)
+    pie2 + scale_fill_brewer("Country",palette="Set2") + blank_theme +
+      theme(axis.text.x=element_blank())
+  })
+  
+  output$cph <- renderPlot({
+    df <- cleanData %>%
+      filter(
+        Date >= input$minDate,
+        Date <= input$maxDate,
+        is.null(input$countryFilter) | cleanData$srccountry %in% input$countryFilter,
+        is.null(input$serviceFilter) | cleanData$service %in% input$serviceFilter
+      ) %>%
+      mutate()
+    hours <- list(substr(df$Time, 0, 2))
+    hourCounts <- table(hours)
+    
+    if(!is.null(input$serviceFilter)){
+      services <- " selected services "
+    }
+    else services <- " "
+    if(!is.null(input$countryFilter)){
+      countries <- " from selected countries"
+    }
+    else countries <- " "
+        
+    title <- paste("Number of", services, "connections per hour", countries, sep="")
+    
+    barplot(hourCounts, main=title, xlab="Hour of day")
+  })
+  
   output$data <- DT::renderDataTable({
     df <- cleanData %>%
       filter(
