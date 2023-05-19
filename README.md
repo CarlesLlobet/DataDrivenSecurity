@@ -2,6 +2,8 @@
 
 This project aims to improve the way System Administrators detect Security Flaw Patterns in their Firewall Connection Logs, by making easy to visualize this logs filtered by services or countries. 
 
+<a href="https://www.buymeacoffee.com/carlesllobet" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
